@@ -1,6 +1,6 @@
-#Name: Shradha Dhananjay Kumbhar.
+Name: Shradha Dhananjay Kumbhar.
 
-#PRN: 25UAM030
+PRN: 25UAM030
 
 # AI Agent Portfolio
 
