@@ -1,93 +1,80 @@
 from collections import deque
-import time
 
-# Graph
 graph = {
     "A": ["B", "C"],
-    "B": ["D"],
-    "C": ["E"],
-    "D": ["F"],
-    "E": ["F"],
-    "F": ["G"],
-    "G": []
+    "B": ["D", "E"],
+    "C": ["F", "G"],
+    "D": ["H"],
+    "E": ["I"],
+    "F": ["J"],
+    "G": ["K"],
+    "H": ["L"],
+    "I": ["L"],
+    "J": ["L"],
+    "K": ["L"],
+    "L": []
 }
 
-
-# BFS
 def bfs(start, goal):
     queue = deque([start])
-    visited = []
-    nodes = 0
+    visited = set()
+    nodes_explored = 0
 
     while queue:
         node = queue.popleft()
 
         if node not in visited:
-            visited.append(node)
-            nodes += 1
+            visited.add(node)
+            nodes_explored += 1
 
             if node == goal:
-                return visited, nodes
+                return nodes_explored
 
             for neighbour in graph[node]:
-                queue.append(neighbour)
+                if neighbour not in visited:
+                    queue.append(neighbour)
 
-    return visited, nodes
+    return nodes_explored
 
 
-# DFS
 def dfs(start, goal):
     stack = [start]
-    visited = []
-    nodes = 0
+    visited = set()
+    nodes_explored = 0
 
     while stack:
         node = stack.pop()
 
         if node not in visited:
-            visited.append(node)
-            nodes += 1
+            visited.add(node)
+            nodes_explored += 1
 
             if node == goal:
-                return visited, nodes
+                return nodes_explored
 
-            for neighbour in graph[node]:
-                stack.append(neighbour)
+            for neighbour in reversed(graph[node]):
+                if neighbour not in visited:
+                    stack.append(neighbour)
 
-    return visited, nodes
-
-
-# Start and goal
-start = "A"
-goal = "G"
-
-# BFS timing
-start_time = time.perf_counter()
-
-for i in range(10000):
-    bfs_result, bfs_nodes = bfs(start, goal)
-
-bfs_time = time.perf_counter() - start_time
+    return nodes_explored
 
 
-# DFS timing
-start_time = time.perf_counter()
+if __name__ == "__main__":
+    start = "A"
+    goal = "L"
 
-for i in range(10000):
-    dfs_result, dfs_nodes = dfs(start, goal)
+    print("===== BFS vs DFS =====")
 
-dfs_time = time.perf_counter() - start_time
+    print("\nBFS")
+    for i in range(10000):
+        bfs_nodes = bfs(start, goal)
 
+    print("Nodes Explored:", bfs_nodes)
 
-# Display results
-print("===== BFS vs DFS =====")
+    print("\nDFS")
+    for i in range(10000):
+        dfs_nodes = dfs(start, goal)
 
-print("\nBFS")
-print("Visited:", bfs_result)
-print("Nodes explored:", bfs_nodes)
-print("Time:", bfs_time, "seconds")
-
-print("\nDFS")
-print("Visited:", dfs_result)
-print("Nodes explored:", dfs_nodes)
-print("Time:", dfs_time, "seconds")
+    print("\n===== Final Result =====")
+    print("BFS Nodes Explored:", bfs_nodes)
+    print("DFS Nodes Explored:", dfs_nodes)
